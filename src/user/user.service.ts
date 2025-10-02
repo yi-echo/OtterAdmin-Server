@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryBuilder, Repository } from 'typeorm';
 import { User } from './user.entites';
 import { Logs } from 'src/logs/logs.entites';
 import type { LogGroupResult } from 'src/types/log';
 import { getUserQueryDto } from './dto/get-user.dto';
+import { conditionUtils } from 'src/utils/db.helper';
 
 @Injectable()
 export class UserService {
@@ -15,24 +16,52 @@ export class UserService {
 
   findAll(query: getUserQueryDto) {
     const { limit, page, username, gender, role } = query;
-    const take = limit || 10;
-    return this.userRepostory.find({
-      relations: {
-        profile: true,
-        roles: true,
-      },
-      // where: {
-      //   username,
-      //   profile: {
-      //     gender,
-      //   },
-      //   roles: {
-      //     id: role,
-      //   },
-      // },
-      take,
-      skip: (page - 1) * take,
-    });
+    // const take = limit || 10;
+    // const skip = (page || 1 - 1) * take;
+    // return this.userRepostory.find({
+    //   relations: {
+    //     profile: true,
+    //     roles: true,
+    //   },
+    //   where: {
+    //     username,
+    //     profile: {
+    //       gender,
+    //     },
+    //     roles: {
+    //       id: role,
+    //     },
+    //   },
+    //   take,
+    //   skip: (page - 1) * take,
+    // });
+    const obj = {
+      'user.username': username,
+      'profile.gender': gender,
+      'roles.id': role,
+    };
+    // inner & left & outer
+    const queryBuilder = this.userRepostory
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .leftJoinAndSelect('user.roles', 'roles');
+
+    // if (username) {
+    //   queryBuilder.where('user.username = :username', { username });
+    // } else {
+    //   queryBuilder.where('user.username IS NOT NULL');
+    // }
+    const newQueryBuilder = conditionUtils<User>(queryBuilder, obj);
+    // return this.userRepostory
+    //   .createQueryBuilder('user')
+    //   .leftJoinAndSelect('user.profile', 'profile')
+    //   .leftJoinAndSelect('user.roles', 'roles')
+    //   .where(username ? 'user.username = :username' : '1=1', { username })
+    //   .andWhere(gender ? 'profile.gender = :gender' : '1=1', { gender })
+    //   .andWhere(role ? 'roles.id = :role' : '1=1', { role })
+    //   .limit(10)
+    //   .getMany();
+    return newQueryBuilder.getMany();
   }
 
   find(username: string) {
