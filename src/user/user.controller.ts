@@ -1,7 +1,6 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
-import { ConfigEnum } from 'src/enum/config.enum';
 import { User } from './user.entites';
 import { LogGroupResult } from '../types/log';
 import { Logger } from 'nestjs-pino';
@@ -21,8 +20,13 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Get('/:id')
+  getUserById(): any {
+    return '11';
+  }
+
   @Post()
-  ceaterUser() {
+  ceaterUser(@Body() dto: any) {
     const user = {
       username: 'che2132133n',
       password: '12343321321356',
@@ -30,13 +34,15 @@ export class UserController {
     return this.userService.create(user);
   }
 
-  @Get()
-  getUser(): string {
-    console.log(
-      'Database Host:',
-      this.configService.get(ConfigEnum.DATABASE_HOST),
-    );
-    return 'This action returns all users';
+  @Patch()
+  updateUser(): any {
+    const user = { username: 'newname' } as User;
+    return this.userService.update(1, user);
+  }
+
+  @Delete()
+  deleteUser(): any {
+    return this.userService.remove(1);
   }
 
   @Get('/profile')

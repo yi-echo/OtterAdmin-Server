@@ -16,7 +16,7 @@ import { join } from 'path';
     LoggerModule.forRoot({
       pinoHttp: {
         transport:
-          process.env.NODE_ENV === 'developmet'
+          process.env.NODE_ENV === 'development'
             ? {
                 level: 'info',
                 target: 'pino-pretty',
