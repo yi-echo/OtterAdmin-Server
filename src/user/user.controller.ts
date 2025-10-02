@@ -1,9 +1,19 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entites';
 import { LogGroupResult } from '../types/log';
 import { Logger } from 'nestjs-pino';
+import { getUserQueryDto } from './dto/get-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -15,38 +25,35 @@ export class UserController {
   ) {}
 
   @Get()
-  getAllUser() {
+  getAllUser(@Query() query: getUserQueryDto): any {
     // this.logger.error('success!!!');
-    return this.userService.findAll();
+    return this.userService.findAll(query);
   }
 
   @Get('/:id')
-  getUserById(): any {
-    return '11';
+  getUserById(@Body() id: number): any {
+    return this.userService.findOne(id);
   }
 
   @Post()
   ceaterUser(@Body() dto: any) {
-    const user = {
-      username: 'che2132133n',
-      password: '12343321321356',
-    } as User;
+    const user = dto as User;
     return this.userService.create(user);
   }
 
-  @Patch()
-  updateUser(): any {
-    const user = { username: 'newname' } as User;
-    return this.userService.update(1, user);
+  @Patch('/:id')
+  updateUser(@Body() dto: any, @Param('id') id: number): any {
+    const user = dto as User;
+    return this.userService.update(id, user);
   }
 
-  @Delete()
-  deleteUser(): any {
-    return this.userService.remove(1);
+  @Delete('/:id')
+  deleteUser(@Param('id') id: number): any {
+    return this.userService.remove(id);
   }
 
   @Get('/profile')
-  getProfile(): any {
+  getProfile(@Query('id') query: any): any {
     return this.userService.findUseProfile(2);
   }
 
