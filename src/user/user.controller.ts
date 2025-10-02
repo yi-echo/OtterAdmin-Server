@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Logger, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { ConfigEnum } from 'src/enum/config.enum';
@@ -7,6 +7,7 @@ import { LogGroupResult } from '../types/log';
 
 @Controller('user')
 export class UserController {
+  private logger = new Logger(UserController.name);
   constructor(
     private userService: UserService,
     private configService: ConfigService,
@@ -14,6 +15,7 @@ export class UserController {
 
   @Get()
   getAllUser() {
+    this.logger.error('success!!!');
     return this.userService.findAll();
   }
 
