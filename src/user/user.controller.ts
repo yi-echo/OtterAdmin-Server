@@ -1,21 +1,23 @@
-import { Controller, Get, Logger, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { ConfigEnum } from 'src/enum/config.enum';
 import { User } from './user.entites';
 import { LogGroupResult } from '../types/log';
+import { Logger } from 'nestjs-pino';
 
 @Controller('user')
 export class UserController {
-  private logger = new Logger(UserController.name);
+  // private logger = new Logger(UserController.name);
   constructor(
     private userService: UserService,
     private configService: ConfigService,
+    private logger: Logger,
   ) {}
 
   @Get()
   getAllUser() {
-    this.logger.error('success!!!');
+    // this.logger.error('success!!!');
     return this.userService.findAll();
   }
 
