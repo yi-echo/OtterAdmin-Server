@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryBuilder, Repository } from 'typeorm';
 import { User } from './user.entites';
@@ -16,8 +16,8 @@ export class UserService {
 
   findAll(query: getUserQueryDto) {
     const { limit, page, username, gender, role } = query;
-    // const take = limit || 10;
-    // const skip = (page || 1 - 1) * take;
+    const take = limit || 10;
+    const skip = (page || 1 - 1) * take;
     // return this.userRepostory.find({
     //   relations: {
     //     profile: true,
@@ -61,6 +61,7 @@ export class UserService {
     //   .andWhere(role ? 'roles.id = :role' : '1=1', { role })
     //   .limit(10)
     //   .getMany();
+    // take(take).skip(skip)
     return newQueryBuilder.getMany();
   }
 
@@ -74,7 +75,23 @@ export class UserService {
 
   async create(user: User) {
     const userTmp = this.userRepostory.create(user);
-    return this.userRepostory.save(userTmp);
+    try {
+      const res = await this.userRepostory.save(userTmp);
+      return res;
+    } catch (error: unknown) {
+      if (typeof error === 'object' && error !== null) {
+        const err = error as {
+          errno?: number;
+          code?: string;
+          message?: string;
+        };
+        if (err.errno === 1062 || err.code === 'ER_DUP_ENTRY') {
+          throw new HttpException('Username already exists', 400);
+        }
+        throw new HttpException(err.message ?? 'Database error', 500);
+      }
+      throw new HttpException('Unknown error', 500);
+    }
   }
 
   async update(id: number, user: Partial<User>) {
