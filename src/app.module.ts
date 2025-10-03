@@ -14,6 +14,7 @@ import { Profile } from './user/profiles.entites';
 import { Logs } from './logs/logs.entites';
 import { Roles } from './roles/roles.entites';
 import { Logger } from '@nestjs/common';
+import { LogsModule } from './logs/logs.module';
 
 @Global()
 @Module({
@@ -68,6 +69,7 @@ import { Logger } from '@nestjs/common';
         }) as TypeOrmModuleOptions,
     }),
     UserModule,
+    LogsModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

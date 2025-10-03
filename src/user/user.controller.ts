@@ -7,7 +7,8 @@ import {
   Patch,
   Post,
   Query,
-  Logger,
+  Inject,
+  LoggerService,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
@@ -15,6 +16,7 @@ import { User } from './user.entites';
 import { LogGroupResult } from '../types/log';
 // import { Logger } from 'nestjs-pino';
 import { getUserQueryDto } from './dto/get-user.dto';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Controller('user')
 export class UserController {
@@ -22,7 +24,7 @@ export class UserController {
   constructor(
     private userService: UserService,
     private configService: ConfigService,
-    private readonly logger: Logger,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: LoggerService,
   ) {}
 
   @Get()
