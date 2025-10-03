@@ -50,7 +50,7 @@ export class UserController {
   }
 
   @Delete('/:id')
-  deleteUser(@Param('id') id: number): any {
+  removeUser(@Param('id') id: number): any {
     return this.userService.remove(id);
   }
 

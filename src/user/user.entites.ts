@@ -6,6 +6,8 @@ import {
   ManyToMany,
   JoinTable,
   OneToOne,
+  AfterInsert,
+  AfterRemove,
 } from 'typeorm';
 import { Logs } from 'src/logs/logs.entites';
 import { Roles } from 'src/roles/roles.entites';
@@ -29,6 +31,12 @@ export class User {
   @JoinTable({ name: 'users_roles' })
   roles: Roles[];
 
-  @OneToOne(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
   profile: Profile;
+
+  @AfterInsert()
+  afterInsert() {}
+
+  @AfterRemove()
+  afterRemove() {}
 }

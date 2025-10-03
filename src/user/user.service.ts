@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryBuilder, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from './user.entites';
 import { Logs } from 'src/logs/logs.entites';
 import type { LogGroupResult } from 'src/types/log';
@@ -95,11 +95,16 @@ export class UserService {
   }
 
   async update(id: number, user: Partial<User>) {
-    return this.userRepostory.update(id, user);
+    const userTemp = await this.findUseProfile(id);
+    const newUser = this.userRepostory.merge(userTemp!, user);
+    return this.userRepostory.save(newUser);
+
+    // return this.userRepostory.update(id, user);
   }
 
-  remove(id: number) {
-    return this.userRepostory.delete(id);
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    return this.userRepostory.remove(user!);
   }
 
   findUseProfile(id: number) {
