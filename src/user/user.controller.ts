@@ -27,7 +27,6 @@ export class UserController {
 
   @Get()
   getAllUser(@Query() query: getUserQueryDto): any {
-    this.logger.error('success!!!');
     return this.userService.findAll(query);
   }
 
