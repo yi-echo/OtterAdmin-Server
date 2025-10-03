@@ -7,12 +7,13 @@ import {
   Patch,
   Post,
   Query,
+  Logger,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from './user.entites';
 import { LogGroupResult } from '../types/log';
-import { Logger } from 'nestjs-pino';
+// import { Logger } from 'nestjs-pino';
 import { getUserQueryDto } from './dto/get-user.dto';
 
 @Controller('user')
@@ -21,12 +22,12 @@ export class UserController {
   constructor(
     private userService: UserService,
     private configService: ConfigService,
-    private logger: Logger,
+    private readonly logger: Logger,
   ) {}
 
   @Get()
   getAllUser(@Query() query: getUserQueryDto): any {
-    // this.logger.error('success!!!');
+    this.logger.error('success!!!');
     return this.userService.findAll(query);
   }
 

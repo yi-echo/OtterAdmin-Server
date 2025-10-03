@@ -1,5 +1,25 @@
 TypeORM :中文文档 https://typeorm.bootcss.com/
         :英文文档 https://typeorm.io/docs
+NESTJS  :中文文档 https://docs.nestjs.cn/introduction
+        :英文文档 https://docs.nestjs.com/
 
 第三方库 :typeorm
+        nest-winston/winston/winston-daily-rotate-file
     
+
+
+业务：登录鉴权
+        session/cookie
+        jwt
+        oauth2
+    算法加密
+        base64
+        md5/sha-1
+        des/aes
+        rsa/ecc
+    https
+        ssl
+        http劫持
+        数据篡改
+        敏感信息
+        中间人

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './common/middlewares/http-log.middleware';
@@ -13,6 +13,9 @@ import { User } from './user/user.entites';
 import { Profile } from './user/profiles.entites';
 import { Logs } from './logs/logs.entites';
 import { Roles } from './roles/roles.entites';
+import { Logger } from '@nestjs/common';
+
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -59,7 +62,7 @@ import { Roles } from './roles/roles.entites';
           entities: [User, Profile, Logs, Roles], // 实体类
           autoLoadEntities: true, // 自动加载实体
           // synchronize: configService.get<boolean>(ConfigEnum.DB_SYNCHRONIZE), // 是否自动同步实体到数据库，初始化的时候，生产环境建议关闭
-          synchronize: false,
+          synchronize: true,
           // logging: ['error'], // 是否打印日志
           logging: process.env.NODE_ENV === 'development',
         }) as TypeOrmModuleOptions,
@@ -67,7 +70,8 @@ import { Roles } from './roles/roles.entites';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Logger],
+  exports: [Logger],
 })
 export class AppModule {
   configure(consumer: any) {
