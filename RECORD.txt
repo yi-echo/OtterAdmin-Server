@@ -3,6 +3,7 @@ TypeORM :中文文档 https://typeorm.bootcss.com/
 NESTJS  :中文文档 https://docs.nestjs.cn/introduction
         :英文文档 https://docs.nestjs.com/
         nest --help
+passportjs :https://www.passportjs.org/
 
 第三方库 :typeorm
         nest-winston/winston/winston-daily-rotate-file

@@ -15,6 +15,7 @@ import { Logs } from './logs/logs.entites';
 import { Roles } from './roles/roles.entites';
 import { Logger } from '@nestjs/common';
 import { LogsModule } from './logs/logs.module';
+import { AuthModule } from './auth/auth.module';
 
 @Global()
 @Module({
@@ -70,6 +71,7 @@ import { LogsModule } from './logs/logs.module';
     }),
     UserModule,
     LogsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

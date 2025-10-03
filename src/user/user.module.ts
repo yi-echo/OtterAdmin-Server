@@ -38,5 +38,6 @@ import { Logs } from 'src/logs/logs.entites';
   ],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}
