@@ -7,12 +7,14 @@ passportjs :https://www.passportjs.org/
 
 第三方库 :typeorm
         nest-winston/winston/winston-daily-rotate-file
+        validator
+        pipe:class-transformer   
     
 
 
 业务：登录鉴权
         session/cookie
-        jwt
+        jwt:https://www.jwt.io
         oauth2
     算法加密
         base64

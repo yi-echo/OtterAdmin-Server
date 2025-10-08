@@ -17,7 +17,7 @@ export class UserService {
   findAll(query: getUserQueryDto) {
     const { limit, page, username, gender, role } = query;
     const take = limit || 10;
-    const skip = (page || 1 - 1) * take;
+    const skip = (page || 1 - 1) * take; 
     // return this.userRepostory.find({
     //   relations: {
     //     profile: true,
@@ -73,7 +73,7 @@ export class UserService {
     return this.userRepostory.findOne({ where: { id } });
   }
 
-  async create(user: User) {
+  async create(user: Partial<User>) {
     const userTmp = this.userRepostory.create(user);
     try {
       const res = await this.userRepostory.save(userTmp);
